@@ -17,6 +17,7 @@ int yylex();
 %right '='
 %left '+' '-'
 %left '*' '/'
+%left '(' ')'
 
 %%
 
@@ -31,7 +32,7 @@ statement: assignment
     | expression ':'          { std::cout << $1 << std::endl; }
     ;
 
-assignment: ID '=' expression
+assignment: ID '=' expression ':'
     { 
         printf("Assign %s = %d\n", $1->c_str(), $3); 
         $$ = vars[*$1] = $3; 
@@ -41,6 +42,7 @@ assignment: ID '=' expression
 
 expression: NUMBER                  { $$ = $1; }
     | ID                            { $$ = vars[*$1];      delete $1; }
+    | '(' expression ')'            { $$ = $2; }  // Nueva regla para paréntesis
     | expression '+' expression     { $$ = $1 + $3; }
     | expression '-' expression     { $$ = $1 - $3; }
     | expression '*' expression     { $$ = $1 * $3; }
