@@ -12,12 +12,15 @@
 "-"                     { return '-'; }
 "*"                     { return '*'; }
 "/"                     { return '/'; }
-"="                     { return '='; }
+"="                     { return ASSIGN; }
 "("                     { return '('; }
 ")"                     { return ')'; }
 ":"                     { return ':'; }
-[ \t]                   ;  // skip whitespace
-.|\n                    ; /* ignore all the rest */
+[ \t]                   ;  // Ignorar espacios en blanco
+.                       { 
+                          printf("Error léxico: Token inválido '%s'\n", yytext);
+                          return ERROR;  // Detener el procesamiento y enviar token de error a Yacc
+                        }
 
 %%
 
